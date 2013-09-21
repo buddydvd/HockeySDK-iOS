@@ -173,4 +173,14 @@ extern NSString *const kBITCrashManagerStatus;
  */
 @property (nonatomic, readonly) NSTimeInterval timeintervalCrashInLastSessionOccured;
 
+/*
+ Provides ability to override the bundle identifier with a custom string.
+ */
+@property (nonatomic, copy) NSString *customBundleIdentifier;
+
+/*
+ Provides ability to override the bundle version with a custom string.
+ */
+@property (nonatomic, copy) NSString *customBundleVersionSuffix;
+
 @end

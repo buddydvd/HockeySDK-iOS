@@ -98,6 +98,9 @@ NSString *const kBITCrashManagerStatus = @"BITCrashManagerStatus";
     
     _didCrashInLastSession = NO;
     _timeintervalCrashInLastSessionOccured = -1;
+
+    _customBundleIdentifier = nil;
+    _customBundleVersionSuffix = nil;
     
     _approvedCrashReports = [[NSMutableDictionary alloc] init];
 
@@ -609,11 +612,11 @@ NSString *const kBITCrashManagerStatus = @"BITCrashManagerStatus";
       [crashes appendFormat:@"<crash><applicationname>%s</applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><platform>%@</platform><senderversion>%@</senderversion><version>%@</version><uuid>%@</uuid><log><![CDATA[%@]]></log><userid>%@</userid><username>%@</username><contact>%@</contact><installstring>%@</installstring><description><![CDATA[%@]]></description></crash>",
        [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleExecutable"] UTF8String],
        [self extractAppUUIDs:report],
-       report.applicationInfo.applicationIdentifier,
+       self.customBundleIdentifier ?: report.applicationInfo.applicationIdentifier,
        report.systemInfo.operatingSystemVersion,
        [self getDevicePlatform],
-       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
-       report.applicationInfo.applicationVersion,
+       [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"], self.customBundleVersionSuffix ?: @""],
+       [NSString stringWithFormat:@"%@%@", report.applicationInfo.applicationVersion, self.customBundleVersionSuffix ?: @""],
        crashUUID,
        [crashLogString stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,crashLogString.length)],
        userid,
