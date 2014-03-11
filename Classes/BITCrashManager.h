@@ -221,6 +221,18 @@ typedef NS_ENUM(NSUInteger, BITCrashManagerStatus) {
 @property (nonatomic, assign, getter=shouldShowAlwaysButton) BOOL showAlwaysButton;
 
 
+/*
+ Provides ability to override the bundle identifier with a custom string.
+ */
+@property (nonatomic, copy) NSString *customBundleIdentifier;
+
+
+/*
+ Provides ability to override the bundle version with a custom string.
+ */
+@property (nonatomic, copy) NSString *customBundleVersionSuffix;
+
+
 ///-----------------------------------------------------------------------------
 /// @name Crash Meta Information
 ///-----------------------------------------------------------------------------
