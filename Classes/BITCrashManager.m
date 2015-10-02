@@ -189,6 +189,10 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
     
     _didCrashInLastSession = NO;
     _timeIntervalCrashInLastSessionOccurred = -1;
+
+    _customBundleIdentifier = nil;
+    _customBundleVersionSuffix = nil;
+
     _didLogLowMemoryWarning = NO;
     
     _approvedCrashReports = [[NSMutableDictionary alloc] init];
@@ -1481,12 +1485,12 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
     crashXML = [NSString stringWithFormat:@"<crashes><crash><applicationname><![CDATA[%@]]></applicationname><uuids>%@</uuids><bundleidentifier>%@</bundleidentifier><systemversion>%@</systemversion><platform>%@</platform><senderversion>%@</senderversion><versionstring>%@</versionstring><version>%@</version><uuid>%@</uuid><log><![CDATA[%@]]></log><userid>%@</userid><username>%@</username><contact>%@</contact><installstring>%@</installstring><description><![CDATA[%@]]></description></crash></crashes>",
                 [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleExecutable"],
                 appBinaryUUIDs,
-                appBundleIdentifier,
+                self.customBundleIdentifier ?: appBundleIdentifier,
                 osVersion,
                 deviceModel,
-                [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
-                appBundleMarketingVersion,
-                appBundleVersion,
+                [([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] ?: @"") stringByAppendingString:self.customBundleVersionSuffix ?: @""],
+                [(appBundleMarketingVersion                                             ?: @"") stringByAppendingString:self.customBundleVersionSuffix ?: @""],
+                [(appBundleVersion                                                      ?: @"") stringByAppendingString:self.customBundleVersionSuffix ?: @""],
                 crashUUID,
                 [crashLogString stringByReplacingOccurrencesOfString:@"]]>" withString:@"]]" @"]]><![CDATA[" @">" options:NSLiteralSearch range:NSMakeRange(0,crashLogString.length)],
                 userid,
